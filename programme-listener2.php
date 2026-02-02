@@ -2,7 +2,6 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
-use PhpAmqpLib\Message\AMQPMessage;
 
 // URL CloudAMQP
 $url = "amqps://tqaoitos:JUsqKoAdXa_lqeQ2Q59I3FfueYa3UpyX@dog.lmq.cloudamqp.com/tqaoitos";
@@ -22,22 +21,23 @@ $connection = new AMQPStreamConnection(
     3.0,
     null,
     false,
-    5671 // port SSL
+    5671
 );
 
 $channel = $connection->channel();
 
-// Déclarer la file
 $channel->queue_declare('ma_file', false, true, false, false);
 
-// 🔁 Boucle pour envoyer 50 messages
-for ($i = 1; $i <= 50; $i++) {
-    $messageBody = "Message numéro $i envoyé depuis PHP 🚀";
-    $msg = new AMQPMessage($messageBody);
+echo "En attente de messages...\n";
 
-    $channel->basic_publish($msg, '', 'ma_file');
+$callback = function ($msg) {
+    echo "Message reçu : " . $msg->body . "\n";
+};
 
-    echo "Message envoyé : $messageBody\n";
+$channel->basic_consume('ma_file', '', false, true, false, false, $callback);
+
+while ($channel->is_consuming()) {
+    $channel->wait();
 }
 
 $channel->close();
