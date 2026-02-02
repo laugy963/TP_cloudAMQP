@@ -170,3 +170,78 @@ Si tu veux aller plus loin, je peux te montrer :
 * différence **exchange / queue / routing key**
 
 
+Oui 🙂 **obligatoirement**.
+
+### 🔐 Pourquoi un mot de passe est nécessaire ?
+
+CloudAMQP est un **service distant** et **sécurisé**.
+Pour s’y connecter, RabbitMQ exige toujours :
+
+* un **nom d’utilisateur**
+* un **mot de passe**
+
+👉 Ces infos sont **fournies automatiquement par CloudAMQP**.
+
+---
+
+## 📌 Où est le mot de passe ?
+
+Dans l’URL CloudAMQP que tu as reçue :
+
+```
+amqps://USER:PASSWORD@HOST/VHOST
+```
+
+Exemple :
+
+```
+amqps://abcd1234:xyz987@cow.rmq.cloudamqp.com/abcd1234
+```
+
+* **USER** → `abcd1234`
+* **PASSWORD** → `xyz987`
+* **HOST** → `cow.rmq.cloudamqp.com`
+* **VHOST** → `abcd1234`
+
+👉 Tu **n’inventes rien**, tu recopies ce que CloudAMQP te donne.
+
+---
+
+## 🧠 Bonne pratique (important)
+
+❌ **Ne mets jamais le mot de passe en dur** dans le code en production.
+
+### ✅ Utilise une variable d’environnement
+
+```bash
+export CLOUDAMQP_URL="amqps://user:password@host/vhost"
+```
+
+Puis en PHP :
+
+```php
+$url = getenv('CLOUDAMQP_URL');
+```
+
+---
+
+## 🧪 En local (pour apprendre)
+
+Pour tes tests, tu peux le mettre en dur sans souci 👍
+
+---
+
+## 🟢 Récap
+
+* Oui, **mot de passe obligatoire**
+* Il est **dans l’URL CloudAMQP**
+* CloudAMQP gère l’authentification
+* Le programme 1 et 2 utilisent **la même URL**
+
+Si tu veux, je peux aussi t’expliquer :
+
+* comment **voir les messages** depuis l’interface CloudAMQP
+* comment **changer les identifiants**
+* comment faire **sans CloudAMQP (RabbitMQ local)**
+
+Dis-moi 👌
